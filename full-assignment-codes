@@ -1,0 +1,65 @@
+COFFEE SHOP CODES
+CREATE TABLE COFFEE_SHOP (
+  shop_id INTEGER UNSIGNED PRIMARY KEY,
+  shop_name VARCHAR(50),
+  city VARCHAR(50),
+  state CHAR(2)
+  );
+  
+  INSERT INTO COFFEE_SHOP (shop_id, shop_name, city, state)
+  VALUES (100, 'Mikes Coffee', 'Nashville', 'TN'),
+  		 (101, 'Davids Coffee', 'Destin', 'FL'),
+         (102, 'Russells Coffee', 'Knoxville', 'TN');
+  
+CREATE TABLE EMPLOYEE (
+  employee_id INTEGER UNSIGNED,
+  first_name VARCHAR(30),
+  last_name VARCHAR(30),
+  hire_date DATE,
+  job_title VARCHAR(30),
+  shop_id INTEGER UNSIGNED,
+  PRIMARY KEY (employee_id),
+  FOREIGN KEY (shop_id) REFERENCES COFFEE_SHOP (shop_id)
+  );
+  
+  INSERT INTO EMPLOYEE (employee_id, first_name, last_name, hire_date, job_title, shop_id)
+  VALUES (1000, 'Daniel', 'Roberts', '2021-12-25', 'Owner', 100),
+  		 (1001, 'Blake', 'Turner', '2022-01-12', 'Server', 101),
+         (1002, 'Joshua', 'Wood', '2016-08-16', 'Stock Boy', 102);
+
+CREATE TABLE SUPPLIER (
+  supplier_id INTEGER UNSIGNED,
+  company_name VARCHAR(50),
+  country VARCHAR(30),
+  sales_contact_name VARCHAR(60),
+  email VARCHAR(50) NOT NULL,
+  PRIMARY KEY (supplier_id)
+  );
+  
+  INSERT INTO SUPPLIER (supplier_id, company_name, country, sales_contact_name, email)
+  VALUES (2000, 'MCS', 'United States', 'Billie', 'billie@gmail.com'),
+  		 (2001, 'Galls', 'United States', 'Chris', 'chris@gmail.com'),
+         (2002, 'CMS', 'United States', 'Kyle', 'Kyle@gmail.com');
+  
+CREATE TABLE COFFEE (
+  coffee_id INTEGER UNSIGNED,
+  shop_id INTEGER UNSIGNED,
+  supplier_id INTEGER UNSIGNED,
+  coffee_name VARCHAR(30),
+  price_per_pound NUMERIC(5,2),
+  PRIMARY KEY (coffee_id),
+  FOREIGN KEY (shop_id) REFERENCES COFFEE_SHOP (shop_id),
+  FOREIGN KEY (supplier_id) REFERENCES SUPPLIER (supplier_id)
+  );
+  
+  INSERT INTO COFFEE (coffee_id, shop_id, supplier_id, coffee_name, price_per_pound)
+  VALUES (300, 100, 2000, 'Mocha Latte', 2.50),
+  		 (301, 101, 2001, 'Carmel latte', 1.75),
+         (302, 102, 2002, 'Almond Latte', 1.00);
+         
+CREATE VIEW EMPLOYEE_VIEW
+AS SELECT employee_id, concat(first_name," ", last_name) as employee_full_name, hire_date, job_title, shop_id
+FROM EMPLOYEE;
+
+
+CREATE INDEX coffee_index ON COFFEE(coffee_name);
